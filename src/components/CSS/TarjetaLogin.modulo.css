@@ -127,3 +127,25 @@ input {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.MensajeError {
+    color: #d32f2f !important;
+    background-color: #fde7e7 !important;
+    padding: 12px !important;
+    border-radius: 4px !important;
+    margin: 0 0 16px 0 !important;
+    border: 1px solid #ef9a9a !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  
+  .MensajeError svg {
+    flex-shrink: 0 !important;
+  }
+  
+  .MensajeError span {
+    color: inherit !important; /* Hereda el color rojo */
+  }
