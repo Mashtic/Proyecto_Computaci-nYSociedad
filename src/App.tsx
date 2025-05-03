@@ -10,6 +10,9 @@ import RegistroInicial from "./pages/RegistroInicial";
 import ApplyDetails from "./pages/apply-details";
 import ProfilePage from "./pages/UserInfo";
 import LoginForm from "./pages/LoginPage";
+import AdminSolicitud from "./pages/AdminSolicitud";
+import AdminConfiguracion from "./pages/AdminConfiguracion";
+
 
 //Info para ver el perfil de usuario
 const userData = {
@@ -38,6 +41,8 @@ const App: React.FC = () => {
           <Route path="/InicioSesion" element={<InicioSesion />} />
           <Route path="/RegistroFinal" element={<RegistroFinal />} />
           <Route path="/RegistroInicial" element={<RegistroInicial />} />
+          <Route path="/admin/solicitudes" element={<AdminSolicitud />} />
+          <Route path="/admin/configuracion" element={<AdminConfiguracion />} /> 
         </Routes>
       </main>
       <PiePagina />

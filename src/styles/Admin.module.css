@@ -1,0 +1,45 @@
+.main {
+    padding: 2rem;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .estadoActivo {
+    color: green;
+  }
+  
+  .botonesEstado {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .bloquear {
+    background-color: red;
+    color: white;
+    padding: 0.5rem 1rem;
+  }
+  
+  .activar {
+    background-color: green;
+    color: white;
+    padding: 0.5rem 1rem;
+  }
+  
+  .historial {
+    list-style: none;
+    padding-left: 1rem;
+  }
+  
+  .historial li {
+    padding: 0.3rem 0;
+  }
+  
