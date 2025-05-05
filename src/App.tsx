@@ -4,9 +4,8 @@ import Encabezado from "./components/Header";
 import PiePagina from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import ProfilePage from "./pages/UserInfo";
+import ApplyDetails from "./pages/apply-details";
 
-//Borrar esto cuando el backend esté listo
 const userData = {
   nombre: "John",
   apellidos: "Doe Ramírez Alfaro",
@@ -30,7 +29,8 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/user-info" element={<ProfilePage user={userData} emprendimiento={emprendimientoData} />} />
+          <Route path="/apply-details" element={<ApplyDetails />} />
+          
         </Routes>
       </main>
       <PiePagina />
