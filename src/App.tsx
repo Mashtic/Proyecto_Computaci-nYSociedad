@@ -4,8 +4,6 @@ import Encabezado from "./components/Header";
 import PiePagina from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
-
-//Postularse
 import ApplyDetails from "./pages/apply-details";
 
 const App: React.FC = () => {

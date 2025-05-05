@@ -1,9 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../styles/Home.module.css'; 
 
-
 const Home: React.FC = () => {
+  const navigate = useNavigate();
   const ferias = [1, 2, 3]; 
+
+  const handleButtonClick = () => {
+    navigate('/apply-details');
+  };
 
   return (
     <>  
@@ -32,7 +37,9 @@ const Home: React.FC = () => {
                   <li>Reservar el espacio con al menos 7 días de anticipación.</li>
                   <li>Cumplir con las normas de seguridad y logística del TEC.</li>
                 </ul>
-                <button className={styles.button}>Solicitar Espacio</button>
+                <button className={styles.button} onClick={handleButtonClick}>
+                  Solicitar Espacio
+                </button>
               </div>
             ))}
           </div>
