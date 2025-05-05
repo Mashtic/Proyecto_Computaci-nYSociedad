@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Encabezado from "./Componentes/Encabezado";
-import PiePagina from "./Componentes/PiePagina";
+import Encabezado from "./components/Header";
+import PiePagina from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
 
