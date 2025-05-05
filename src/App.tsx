@@ -4,19 +4,25 @@ import Encabezado from "./Componentes/Encabezado";
 import PiePagina from "./Componentes/PiePagina";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import InicioSesion  from "./pages/InicioSesion";
+import RegistroFinal  from "./pages/RegistroFinal";
+import RegistroInicial from "./pages/RegistroInicial";
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <>
       <Encabezado />
       <main style={{ padding: "1rem" }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/InicioSesion" element={<InicioSesion />} />
+          <Route path="/RegistroFinal" element={<RegistroFinal />} />
+          <Route path="/RegistroInicial" element={<RegistroInicial />} />
         </Routes>
       </main>
       <PiePagina />
-    </Router>
+    </>
   );
 };
 

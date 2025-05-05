@@ -27,6 +27,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-left: -4%;
   }
 
 .pie-contacto p {
@@ -42,6 +43,7 @@
 .pie-redes {
     display: flex;
     gap: 50px;
+    margin-right: 5%;
   }
 
 .icono-red {
