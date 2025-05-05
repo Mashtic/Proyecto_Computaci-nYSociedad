@@ -5,7 +5,9 @@ import PiePagina from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import ApplyDetails from "./pages/apply-details";
+import ProfilePage from "./pages/UserInfo";
 
+//Info para ver el perfil de usuario
 const userData = {
   nombre: "John",
   apellidos: "Doe Ramírez Alfaro",
@@ -30,7 +32,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/apply-details" element={<ApplyDetails />} />
-          
+          <Route path="/user-info" element={<ProfilePage user={userData} emprendimiento={emprendimientoData} />} />
         </Routes>
       </main>
       <PiePagina />
