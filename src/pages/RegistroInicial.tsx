@@ -1,5 +1,5 @@
 import React from "react";
-import TarjetaRegistroInicial from "../Componentes/TarjetaRegistroInicial";
+import TarjetaRegistroInicial from "../components/TarjetaRegistroInicial";
 
 const RegistroInicial: React.FC = () => {
   return (

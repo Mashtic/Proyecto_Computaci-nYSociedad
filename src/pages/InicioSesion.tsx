@@ -1,5 +1,5 @@
 import React from "react";
-import TarjetaLogin from "../Componentes/TarjetaLogin";
+import TarjetaLogin from "../components/TarjetaLogin";
 
 const InicioSesion: React.FC = () => {
   return (

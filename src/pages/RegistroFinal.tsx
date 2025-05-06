@@ -1,5 +1,5 @@
 import React from "react";
-import TarjetaRegistroFinal from "../Componentes/TarjetaRegistroFinal";
+import TarjetaRegistroFinal from "../components/TarjetaRegistroFinal";
 
 const InicioSesion: React.FC = () => {
   return (
