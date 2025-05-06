@@ -35,7 +35,7 @@ const Home: React.FC = () => {
       try {
         const feriasData = await getFerias();
         const feriasActivas = feriasData.filter(feria => 
-          feria.estado === 'activa' || 'proximamente'
+          feria.estado === 'activa' || feria.estado ==='proximamente'
         );
         setFerias(feriasActivas);
       } catch (err) {
