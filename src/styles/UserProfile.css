@@ -1,0 +1,95 @@
+.profile-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .profile-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .profile-user-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+  }
+  
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-img-placeholder {
+    color: gray;
+    text-align: center;
+  }
+  
+  .profile-details {
+    flex: 1;
+  }
+  
+  .profile-field {
+    margin-bottom: 15px;
+  }
+  
+  .field-label {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .field-value {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .password-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  .change-photo-btn,
+  .change-password-btn {
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    background: none;
+    border: none;
+    text-decoration: underline;
+  }
+  
+  .divider {
+    margin-top: 30px;
+    border: 1px solid #ddd;
+  }
+  
+  .emprendimiento-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .emprendimiento-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  

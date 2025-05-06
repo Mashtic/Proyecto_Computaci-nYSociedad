@@ -1,76 +1,104 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUser } from '../services/dbUserService';
 import { UserProfile, Emprendimiento } from '../types/profileTypes';
+import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import '../styles/UserProfile.css';
 
-interface ProfilePageProps {
-  user: UserProfile;
-  emprendimiento: Emprendimiento;
-}
+const ProfilePage: React.FC = () => {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [emprendimiento, setEmprendimiento] = useState<Emprendimiento | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [apellido, setApellido] = useState<string>('');
+  const navigate = useNavigate();
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, emprendimiento }) => {
+  useEffect(() => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    
+
+    if (!currentUser) {
+      navigate('/InicioSesion');
+      return;
+    }
+
+    const fetchUserData = async () => {
+      try {
+        const userData = await getUser(currentUser.uid);
+        if (userData) {
+          setUser(userData.user);
+          console.log(userData);
+          setApellido(userData.user.apellidos || 'Sin apellidos');
+          setEmprendimiento(userData.emprendimiento);
+        }
+      } catch (err) {
+        setError('Error al cargar la información del usuario.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
+
+  if (loading) return <p>Cargando perfil...</p>;
+  if (error) return <p>{error}</p>;
+  if (!user || !emprendimiento) return <p>No se encontró al usuario o emprendimiento.</p>;
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10 bg-white shadow-md rounded-lg">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Mi cuenta</h1>
+    <div className="profile-container">
+      <h1 className="profile-title">Mi cuenta</h1>
 
       {/* Sección de usuario */}
-      <div className="flex flex-col lg:flex-row gap-10 mb-12">
-        {/* Foto de perfil */}
-        <div className="flex flex-col items-center lg:items-start">
+      <div className="profile-user-info">
+        <div className="profile-photo">
           {user.fotoPerfil ? (
-            <img
-              src={user.fotoPerfil}
-              alt="Foto de perfil"
-              className="w-40 h-40 rounded-full object-cover mb-4"
-            />
+            <img src={user.fotoPerfil} alt="Foto de perfil" className="profile-img" />
           ) : (
-            <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center mb-4">
-              <span className="text-gray-500">Sin foto</span>
-            </div>
+            <div className="profile-img-placeholder">Sin foto</div>
           )}
-          <button className="text-blue-600 hover:underline">Cambiar foto de perfil</button>
         </div>
-
-        {/* Datos personales */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+        <div className="profile-details">
           <ProfileField label="Nombre" value={user.nombre} />
-          <ProfileField label="Apellidos" value={user.apellidos} />
+          <ProfileField label="Apellidos" value={apellido} />
           <ProfileField label="Departamento" value={user.departamento} />
           <ProfileField label="Correo Electrónico" value={user.email} />
           <ProfileField label="Cédula" value={user.cedula} />
           <PasswordField />
+          <button className="change-photo-btn">Cambiar foto de perfil</button>
         </div>
       </div>
 
-      <hr className="my-8 border-gray-300" />
+      <hr className="divider" />
 
       {/* Sección de emprendimiento */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Emprendimiento</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
-          <ProfileField label="Nombre" value={emprendimiento.nombre} />
-          <ProfileField label="Descripción" value={emprendimiento.descripcion} />
-          <ProfileField label="Categoría" value={emprendimiento.categoria} />
-          <ProfileField label="Fecha de creación" value={emprendimiento.fechaCreacion} />
+        <h2 className="emprendimiento-title">Emprendimiento</h2>
+        <div className="emprendimiento-details">
+          <ProfileField label="Nombre" value={emprendimiento.nombre || 'N/A'} />
+          <ProfileField label="Descripción" value={emprendimiento.descripcion || 'N/A'} />
+          <ProfileField label="Categoría" value={emprendimiento.categoria || 'N/A'} />
+          <ProfileField label="Fecha de creación" value={emprendimiento.fechaCreacion || 'N/A'} />
         </div>
       </div>
     </div>
   );
 };
 
-// Campo reutilizable
 const ProfileField: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div>
-    <p className="text-sm font-medium text-gray-600">{label}</p>
-    <p className="text-gray-900">{value}</p>
+  <div className="profile-field">
+    <p className="field-label">{label}</p>
+    <p className="field-value">{value}</p>
   </div>
 );
 
-// Campo de contraseña
 const PasswordField: React.FC = () => (
-  <div>
-    <p className="text-sm font-medium text-gray-600">Contraseña</p>
-    <div className="flex items-center">
-      <span className="text-gray-900">***********</span>
-      <button className="ml-3 text-blue-600 hover:underline text-sm">Cambiar</button>
+  <div className="profile-field">
+    <p className="field-label">Contraseña</p>
+    <div className="password-wrapper">
+      <span className="field-value">***********</span>
+      <button className="change-password-btn">Cambiar</button>
     </div>
   </div>
 );

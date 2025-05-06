@@ -1,6 +1,7 @@
 import { db } from "./firebaseConfig";
 import { doc, setDoc, getDoc, updateDoc, FirestoreError } from "firebase/firestore"; 
 import { collection, addDoc } from "firebase/firestore";
+import { UserProfile, Emprendimiento } from "../types/profileTypes";
 
 // Define una interfaz para la estructura del usuario
 interface UserData {
@@ -56,24 +57,38 @@ export async function saveNegocioData(businessData: {
 }
 
 
-export async function getUser(userId: string): Promise<UserData | null> {
+export async function getUser(userId: string): Promise<{ user: UserProfile; emprendimiento: Emprendimiento } | null> {
   try {
     const userRef = doc(db, "users", userId);
     const userDoc = await getDoc(userRef);
 
     if (userDoc.exists()) {
-      return userDoc.data() as UserData;
+      const userData = userDoc.data();
+
+      // Asegurémonos de que los datos coinciden con las interfaces
+      const user: UserProfile = {
+        nombre: userData.nombre,
+        apellido: userData.apellidos,
+        departamento: userData.departamento,
+        email: userData.email,
+        cedula: userData.cedula,
+        fotoPerfil: userData.fotoPerfil || undefined,
+      };
+
+      const emprendimiento: Emprendimiento = {
+        nombre: userData.emprendimiento?.nombre || '',
+        descripcion: userData.emprendimiento?.descripcion || '',
+        categoria: userData.emprendimiento?.categoria || '',
+        fechaCreacion: userData.emprendimiento?.fechaCreacion || '',
+      };
+
+      return { user, emprendimiento };
     } else {
       console.log("No such user!");
       return null;
     }
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Error getting user:", error);
-    
-    // Manejo de errores más tipo-safe
-    if (error instanceof FirestoreError) {
-      throw new Error(`Firestore error: ${error.code} - ${error.message}`);
-    }
     throw new Error("Unknown error occurred while getting user");
   }
 }

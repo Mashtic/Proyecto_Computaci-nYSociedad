@@ -76,11 +76,17 @@ const Home: React.FC = () => {
   return (
     <main className={styles.main}>
       <section className={styles.container}>
+      <button 
+          className={styles.adminButton} 
+          onClick={() => navigate('/profile')}
+        >
+          Ver mi perfil
+        </button>
         <button 
           className={styles.adminButton} 
           onClick={() => navigate('/admin/solicitudes-feria')}
         >
-          Ir a Solicitudes de Feria (Admin)
+          Ir a Solicitudes de Feria
         </button>
         <button 
           className={styles.logoutButton} 
