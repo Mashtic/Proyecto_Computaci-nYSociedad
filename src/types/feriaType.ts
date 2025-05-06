@@ -10,3 +10,4 @@ export interface Feria {
     imagenURL?: string;
     estado?: 'activa' | 'finalizada' | 'proximamente';
   }
+export const DEFAULT_FERIA_IMAGE = 'https://placehold.co/600x400?text=Photo+not+available';

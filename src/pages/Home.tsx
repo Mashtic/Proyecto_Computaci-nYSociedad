@@ -65,15 +65,19 @@ const Home: React.FC = () => {
         ) : (
           <div className={styles.cardContainer}>
             {ferias.map((feria) => (
-              <div key={feria.id} className={styles.card}>
+                <div key={feria.id} className={styles.card}>
                 {feria.imagenURL ? (
                   <img 
-                    src={feria.imagenURL} 
-                    alt={feria.titulo} 
-                    className={styles.imagePlaceholder}
+                  src={feria.imagenURL} 
+                  alt={feria.titulo} 
+                  className={styles.imagePlaceholder}
                   />
                 ) : (
-                  <div className={styles.imagePlaceholder}></div>
+                  <img 
+                  src="/src/assets/noDisponible.png" 
+                  alt="Imagen no disponible" 
+                  className={styles.imagePlaceholder}
+                  />
                 )}
                 
                 <h2 className={styles.cardTitle}>{feria.titulo || 'Título no disponible'}</h2>
@@ -83,29 +87,29 @@ const Home: React.FC = () => {
                 
                 <div className={styles.details}>
                   {feria.fecha && (
-                    <p><strong>Fecha del evento:</strong> {feria.fecha}</p>
+                  <p><strong>Fecha del evento:</strong> {feria.fecha}</p>
                   )}
                   
                   {feria.ubicacion && (
-                    <p><strong>Ubicación:</strong> {feria.ubicacion}</p>
+                  <p><strong>Ubicación:</strong> {feria.ubicacion}</p>
                   )}
                   
                   {feria.horario && (
-                    <p><strong>Horario:</strong> {feria.horario}</p>
+                  <p><strong>Horario:</strong> {feria.horario}</p>
                   )}
                   
                   {feria.requisitos?.trim() && (
                 <>
                   <p><strong>Requisitos para participar:</strong></p>
                   <ul>
-                    {feria.requisitos
-                      .split('\n')
-                      .map((item: string, index: number) => (
-                        <li key={index}>{item.trim()}</li>
-                      ))}
+                  {feria.requisitos
+                    .split('\n')
+                    .map((item: string, index: number) => (
+                    <li key={index}>{item.trim()}</li>
+                    ))}
                   </ul>
                 </>
-              )}
+                )}
                 </div>
                 
                 <button 
@@ -114,7 +118,7 @@ const Home: React.FC = () => {
                 >
                   Solicitar Espacio
                 </button>
-              </div>
+                </div>
             ))}
           </div>
         )}
