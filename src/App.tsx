@@ -12,6 +12,7 @@ import ProfilePage from "./pages/UserInfo";
 import LoginForm from "./pages/LoginPage";
 import AdminSolicitud from "./pages/AdminSolicitud";
 import AdminConfiguracion from "./pages/AdminConfiguracion";
+import DetalleFeria from "./pages/apply-details";
 
 
 //Info para ver el perfil de usuario
@@ -43,6 +44,7 @@ const App: React.FC = () => {
           <Route path="/RegistroInicial" element={<RegistroInicial />} />
           <Route path="/admin/solicitudes" element={<AdminSolicitud />} />
           <Route path="/admin/configuracion" element={<AdminConfiguracion />} /> 
+          <Route path="/apply-details" element={<DetalleFeria />} />
         </Routes>
       </main>
       <PiePagina />

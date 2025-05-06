@@ -5,6 +5,7 @@ import { getEspaciosPorFeria } from '../services/espacioService';
 import { Espacio } from '../types/espacioTypes';
 import { auth } from '../services/firebaseConfig';
 import { useNavigate } from 'react-router-dom';
+import { reservarEspacio } from '../services/reservaService';
 
 const DetalleFeria: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -58,9 +59,16 @@ const DetalleFeria: React.FC = () => {
     }
 
     try {
-      // Aquí implementarías la reserva
-      alert(`Espacio ${espacioId} seleccionado`);
+      
+      //alert(`Espacio ${espacioId} seleccionado`);
       // Actualizar estado en Firebase y localmente
+      
+      //console.log('Espacio seleccionado:', espacioId);
+      //console.log('Feria ID:', feriaId);
+      //console.log('Usuario ID:', currentUser.uid);
+      await reservarEspacio(espacioId, feriaId!, currentUser.uid);
+      
+      
       setEspacios(espacios.map(esp => 
         esp.id === espacioId ? { ...esp, disponible: false } : esp
       ));
