@@ -1,4 +1,4 @@
-import { doc, updateDoc, arrayUnion, collection, addDoc } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
 interface Reserva {
@@ -60,4 +60,30 @@ export const subirDocumentosReserva = async (
   // y obtener sus IDs de referencia
   
   return documentosId;
+};
+
+// Funcion para obtener reservas por feria
+export const getReservasPorFeria = async (feriaId: string): Promise<Reserva[]> => {
+  try {
+    const reservasCollection = collection(db, "reservas");
+    const q = query(reservasCollection, where("feriaId", "==", feriaId));
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        feriaId: data.feriaId,
+        espacioId: data.espacioId,
+        userId: data.userId,
+        estado: data.estado,
+        fechaReserva: data.fechaReserva.toDate ? data.fechaReserva.toDate() : data.fechaReserva,
+        documentosId: data.documentosId || [],
+        fechaAprobacion: data.fechaAprobacion ? data.fechaAprobacion.toDate() : undefined
+      } as Reserva;
+    });
+  } catch (error) {
+    console.error("Error al obtener reservas:", error);
+    throw new Error("No se pudieron cargar las reservas");
+  }
 };

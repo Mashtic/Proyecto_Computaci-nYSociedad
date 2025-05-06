@@ -7,11 +7,12 @@ import About from "./pages/About";
 import InicioSesion  from "./pages/InicioSesion";
 import RegistroFinal  from "./pages/RegistroFinal";
 import RegistroInicial from "./pages/RegistroInicial";
-import ProfilePage from "./pages/UserInfo";
+//import ProfilePage from "./pages/UserInfo";
 import AdminSolicitud from "./pages/AdminSolicitud";
 import AdminConfiguracion from "./pages/AdminConfiguracion";
 import DetalleFeria from "./pages/apply-details";
 import AdminSolicitudesFeria from "./pages/AdminSolicitudesFeria";
+import AdminSolicitudesPendientes from "./pages/AdminSolicitudesPendientes";
 
 const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const App: React.FC = () => {
           <Route path="/admin/configuracion" element={<AdminConfiguracion />} /> 
           <Route path="/apply-details" element={<DetalleFeria />} />
           <Route path="/admin/solicitudes-feria" element={<AdminSolicitudesFeria />} />
+          <Route path="/admin/solicitudes-pendientes" element={<AdminSolicitudesPendientes />} />
         </Routes>
       </main>
       <PiePagina />

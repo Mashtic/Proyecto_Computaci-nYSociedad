@@ -2,19 +2,25 @@ import { auth } from "./firebaseConfig";
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
-  UserCredential,
-  User
+  UserCredential, 
+  User 
 } from "firebase/auth";
-import { saveUser } from "./dbUserService";
+import { saveUser, saveNegocioData, defaultUserData } from "./dbUserService";
 
-// Definimos una interfaz para los datos del usuario
+// Definimos una interfaz para los datos del usuario y los del negocio
 interface UserData {
   email: string;
   password: string;
   nombre: string;
-  apellido: string;
+  apellidos: string;
   cedula: string;
   rol: string;
+  // Datos del negocio
+  nombreNegocio: string;
+  fechaCreacion: string;
+  descripcion: string;
+  sector: string;
+  userId?: string; // Opcional, se asigna después de crear el usuario
 }
 
 export async function signUp(userData: UserData): Promise<User | null> {
@@ -24,16 +30,37 @@ export async function signUp(userData: UserData): Promise<User | null> {
       return null;
     }
 
-    const { email, password, nombre, apellido, cedula, rol } = userData;
+    const { 
+      email, password, nombre, apellidos: apellido, cedula, rol: inputRol, 
+      nombreNegocio, fechaCreacion, descripcion, sector 
+    } = userData;
+
+    const rol = inputRol || 'user';
+
+    console.log("Rol:", rol);
+
+    // Crear el usuario en Firebase Auth
     const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
 
     // Una vez creado el usuario, se guarda en la base de datos
-    await saveUser(userCredential.user.uid, {
+    const userId = userCredential.user.uid;
+    
+    // Guardar los datos del usuario en Firestore
+    await saveUser(userId, {
       nombre,
       apellido,
       cedula,
       email,
       rol
+    });
+
+    // Guardar los datos del negocio en Firestore
+    await saveNegocioData({
+      nombreNegocio,
+      fechaCreacion,
+      descripcion,
+      sector,
+      userId
     });
 
     return userCredential.user;
@@ -45,6 +72,7 @@ export async function signUp(userData: UserData): Promise<User | null> {
     throw new Error("Unknown error occurred during sign up");
   }
 }
+
 
 export async function signIn(email: string, password: string): Promise<User> {
   try {
