@@ -1,15 +1,8 @@
-import { doc, updateDoc, arrayUnion, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, collection, addDoc, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
+import { Reserva, ReservaConInfoExtra } from '../types/reservaType';
 
-interface Reserva {
-  feriaId: string;
-  espacioId: string;
-  userId: string;
-  estado: 'pendiente' | 'aprobada' | 'rechazada' | 'cancelada';
-  fechaReserva: Date;
-  documentosId?: string[];
-  fechaAprobacion?: Date;
-}
+
 
 export const reservarEspacio = async (
   espacioId: string,
@@ -63,27 +56,59 @@ export const subirDocumentosReserva = async (
 };
 
 // Funcion para obtener reservas por feria
-export const getReservasPorFeria = async (feriaId: string): Promise<Reserva[]> => {
+export const getReservasPorFeriaConInfo = async (feriaId: string): Promise<ReservaConInfoExtra[]> => {
   try {
-    const reservasCollection = collection(db, "reservas");
-    const q = query(reservasCollection, where("feriaId", "==", feriaId));
+    const reservasCollection = collection(db, 'reservas');
+    const q = query(reservasCollection, where('feriaId', '==', feriaId));
     const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
+
+    const reservas: ReservaConInfoExtra[] = [];
+
+    // Iterar sobre las reservas y obtener información adicional
+    for (const docSnapshot of querySnapshot.docs) {
+      const data = docSnapshot.data();
+      const reserva: ReservaConInfoExtra = {
+        id: docSnapshot.id,
         feriaId: data.feriaId,
         espacioId: data.espacioId,
         userId: data.userId,
         estado: data.estado,
         fechaReserva: data.fechaReserva.toDate ? data.fechaReserva.toDate() : data.fechaReserva,
         documentosId: data.documentosId || [],
-        fechaAprobacion: data.fechaAprobacion ? data.fechaAprobacion.toDate() : undefined
-      } as Reserva;
-    });
+        fechaAprobacion: data.fechaAprobacion ? data.fechaAprobacion.toDate() : undefined,
+      };
+
+      // Obtener el nombre del emprendedor
+      const userRef = doc(db, 'users', data.userId); // Suponiendo que tienes la colección de usuarios
+      const userSnapshot = await getDoc(userRef);
+
+      if (userSnapshot.exists()) {
+        const userData = userSnapshot.data();
+        reserva.nombreEmprendedor = userData.nombre + ' ' + userData.apellido;
+      }
+
+      // Obtener el nombre del emprendimiento desde la colección 'negocios' filtrando por userId
+      const negocioRef = collection(db, 'negocios');
+      const negocioQuery = query(negocioRef, where('userId', '==', data.userId));
+      const negocioSnapshot = await getDocs(negocioQuery);
+
+      console.log("Buscando negocio para userId:", data.userId); 
+      if (!negocioSnapshot.empty) {
+        // Asumimos que solo hay un negocio por userId
+        const negocioData = negocioSnapshot.docs[0].data();
+
+        reserva.nombreEmprendimiento = negocioData.nombreNegocio || 'Nombre no disponible';
+        reserva.descripcionEmprendimiento = negocioData.descripcion || 'Descripción no disponible';
+      } else {
+        reserva.nombreEmprendimiento = 'Nombre no disponible'; // En caso de no encontrar un negocio
+      }
+
+      reservas.push(reserva);
+    }
+
+    return reservas;
   } catch (error) {
-    console.error("Error al obtener reservas:", error);
-    throw new Error("No se pudieron cargar las reservas");
+    console.error('Error al obtener reservas con información extra:', error);
+    throw new Error('No se pudieron cargar las reservas con la información adicional');
   }
 };
