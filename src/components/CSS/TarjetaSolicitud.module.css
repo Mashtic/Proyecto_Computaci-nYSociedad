@@ -1,0 +1,71 @@
+.card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  margin: 1.5rem auto;
+  max-width: 800px;
+}
+
+.cardText {
+  flex: 2;
+}
+
+.cardText h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+.cardText p {
+  margin: 0.25rem 0;
+  color: #444;
+  font-size: 1rem;
+}
+
+.cardButtons {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-left: 2rem;
+  justify-content: center;
+}
+
+.cardButtons button {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Botón específico */
+.ver {
+  background-color: #3498db;
+}
+.ver:hover {
+  background-color: #2980b9;
+}
+
+.aceptar {
+  background-color: #2ecc71;
+}
+.aceptar:hover {
+  background-color: #27ae60;
+}
+
+.rechazar {
+  background-color: #e74c3c;
+}
+.rechazar:hover {
+  background-color: #c0392b;
+}

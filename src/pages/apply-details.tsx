@@ -54,7 +54,7 @@ const DetalleFeria: React.FC = () => {
   const handleSeleccionar = async (espacioId: string) => {
     if (!currentUser) {
       alert('Debes iniciar sesión para reservar un espacio');
-      navigate(`/login`);
+      navigate(`/InicioSesion`);
       return;
     }
 
@@ -67,7 +67,7 @@ const DetalleFeria: React.FC = () => {
       //console.log('Feria ID:', feriaId);
       //console.log('Usuario ID:', currentUser.uid);
       await reservarEspacio(espacioId, feriaId!, currentUser.uid);
-      
+      alert('Espacio reservado exitosamente');
       
       setEspacios(espacios.map(esp => 
         esp.id === espacioId ? { ...esp, disponible: false } : esp

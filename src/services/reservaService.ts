@@ -33,9 +33,7 @@ export const reservarEspacio = async (
     // 2. Actualizar el espacio como no disponible
     const espacioRef = doc(db, "espacios", espacioId);
     await updateDoc(espacioRef, {
-      disponible: false,
-      reservaId: reservaRef.id, // Referencia a la reserva
-      ultimaActualizacion: new Date()
+      disponible: false
     });
 
     // 3. Actualizar la feria con referencia a la reserva
