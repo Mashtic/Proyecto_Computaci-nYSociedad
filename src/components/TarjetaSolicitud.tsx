@@ -1,11 +1,15 @@
 import React from "react";
 import styles from "./CSS/TarjetaSolicitud.module.css";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../services/firebaseConfig";
 
 interface CardOfertaProps {
   nombreEmprendedor: string;
   nombreEmprendimiento: string;
   descripcion: string;
   haParticipado: boolean;
+  reservaId: string;
+  onEstadoActualizado?: (reservaId: string, nuevoEstado: "aceptada" | "rechazada") => void;
 }
 
 const CardOferta: React.FC<CardOfertaProps> = ({
@@ -13,17 +17,31 @@ const CardOferta: React.FC<CardOfertaProps> = ({
   nombreEmprendimiento,
   descripcion,
   haParticipado,
+  reservaId,
+  onEstadoActualizado,
 }) => {
   const handleVerAdjuntos = () => {
-    alert("Ver adjuntos");
+    alert("Ver adjuntos \nEsta pendiente de implementar la funcionalidad");
   };
 
-  const handleAceptar = () => {
-    alert("Oferta aceptada");
+  const handleAceptar = async () => {
+    try {
+      const reservaRef = doc(db, "reservas", reservaId);
+      await updateDoc(reservaRef, { estado: "aceptada" });
+      onEstadoActualizado?.(reservaId, "aceptada");
+    } catch (error) {
+      console.error("Error al aceptar reserva:", error);
+    }
   };
 
-  const handleRechazar = () => {
-    alert("Oferta rechazada");
+  const handleRechazar = async () => {
+    try {
+      const reservaRef = doc(db, "reservas", reservaId);
+      await updateDoc(reservaRef, { estado: "rechazada" });
+      onEstadoActualizado?.(reservaId, "rechazada");
+    } catch (error) {
+      console.error("Error al rechazar reserva:", error);
+    }
   };
 
   return (

@@ -112,3 +112,15 @@ export const getReservasPorFeriaConInfo = async (feriaId: string): Promise<Reser
     throw new Error('No se pudieron cargar las reservas con la información adicional');
   }
 };
+
+export const actualizarEstadoReserva = async (reservaId: string, nuevoEstado: 'aprobada' | 'rechazada'): Promise<void> => {
+  try {
+    const reservaRef = doc(db, 'reservas', reservaId);
+    await updateDoc(reservaRef, {
+      estado: nuevoEstado
+      });
+  } catch (error) {
+    console.error('Error al actualizar el estado de la reserva:', error);
+    throw new Error('No se pudo actualizar el estado de la reserva');
+  }
+};
