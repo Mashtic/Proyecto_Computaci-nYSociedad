@@ -58,3 +58,15 @@ export async function signIn(email: string, password: string): Promise<User> {
     throw new Error("Unknown error occurred during sign in");
   }
 }
+
+export async function signOut(): Promise<void> {
+  try {
+    await auth.signOut();
+  } catch (error: unknown) {
+    console.error("Error signing out:", error);
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("Unknown error occurred during sign out");
+  }
+}

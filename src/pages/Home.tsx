@@ -5,6 +5,7 @@ import { getFerias } from '../services/feriaService';
 import { Feria } from '../types/feriaType';
 import { auth } from '../services/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
+import { signOut } from '../services/authService';
 
 
 const Home: React.FC = () => {
@@ -19,11 +20,10 @@ const Home: React.FC = () => {
     if (currentUser) {
       // Usuario logeado
       setUser(currentUser);
-      console.log('Usuario logeado:', currentUser.email);
+      //console.log('Usuario logeado:', currentUser.email);
     } else {
       // No hay usuario logeado
       console.log('No hay usuario logeado');
-      // Redirigir a login si lo deseas
       // navigate('/login');
     }
   });
@@ -76,6 +76,14 @@ const Home: React.FC = () => {
   return (
     <main className={styles.main}>
       <section className={styles.container}>
+        <button 
+          className={styles.logoutButton} 
+          onClick={() => {
+            signOut();
+          }}
+        >
+          Cerrar Sesión
+        </button>
         <h1 className={styles.title}>Ferias Disponibles</h1>
         <p className={styles.subtitle}>
           Toda la información referente a fechas, disponibilidad y requisitos

@@ -4,9 +4,11 @@ import styles from '../styles/apply-details.module.css';
 import { getEspaciosPorFeria } from '../services/espacioService';
 import { Espacio } from '../types/espacioTypes';
 import { auth } from '../services/firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 const DetalleFeria: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const feriaId = searchParams.get('feriaId'); // Obtenemos el parámetro de la URL
   const [espacios, setEspacios] = useState<Espacio[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ const DetalleFeria: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<any>(null);
 
   useEffect(() => {
-    console.log('FeriaID obtenido:', feriaId); // Para depuración
+    //console.log('FeriaID obtenido:', feriaId);
     
     if (!feriaId) {
       setError('No se especificó ID de feria en la URL');
@@ -51,6 +53,7 @@ const DetalleFeria: React.FC = () => {
   const handleSeleccionar = async (espacioId: string) => {
     if (!currentUser) {
       alert('Debes iniciar sesión para reservar un espacio');
+      navigate(`/login`);
       return;
     }
 
