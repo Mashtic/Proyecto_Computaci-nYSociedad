@@ -10,7 +10,7 @@ const Encabezado: React.FC = () => {
           <a href="/">Inicio</a>
           <a href="/solicitudes">Solicitudes</a>
           <a href="/historial">Historial</a>
-          <button className = {"boton-sesion"}>Iniciar Sesión</button>
+            <a href="/login" className={"boton-sesion"}>Iniciar Sesión</a>
         </nav>
       </div>
     </header>

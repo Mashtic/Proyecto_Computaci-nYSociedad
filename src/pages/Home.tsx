@@ -3,18 +3,41 @@ import { useNavigate } from 'react-router-dom';
 import styles from '../styles/Home.module.css';
 import { getFerias } from '../services/feriaService';
 import { Feria } from '../types/feriaType';
+import { auth } from '../services/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+
   const [ferias, setFerias] = useState<Feria[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
+
+  const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
+      // Usuario logeado
+      setUser(currentUser);
+      console.log('Usuario logeado:', currentUser.email);
+    } else {
+      // No hay usuario logeado
+      console.log('No hay usuario logeado');
+      // Redirigir a login si lo deseas
+      // navigate('/login');
+    }
+  });
+
+
 
   useEffect(() => {
     const fetchFerias = async () => {
       try {
         const feriasData = await getFerias();
-        setFerias(feriasData);
+        const feriasActivas = feriasData.filter(feria => 
+          feria.estado === 'activa' || 'proximamente'
+        );
+        setFerias(feriasActivas);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error al cargar ferias');
       } finally {

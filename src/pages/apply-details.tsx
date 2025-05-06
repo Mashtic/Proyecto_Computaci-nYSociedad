@@ -1,23 +1,89 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom'; // Cambiado de useParams
 import styles from '../styles/apply-details.module.css';
-
-interface Espacio {
-  id: number;
-  nombre: string;
-  disponible: boolean;
-  tamano: string;
-  electrico: boolean;
-  anotaciones: string;
-}
-
-const espacios: Espacio[] = [
-  { id: 1, nombre: 'Espacio #1', disponible: true, tamano: '2×2mts', electrico: true, anotaciones: 'Acá irá información adicional sobre el espacio de ser necesario.' },
-  { id: 2, nombre: 'Espacio #2', disponible: false, tamano: '2×2mts', electrico: true, anotaciones: 'En este espacio no se pueden tener comidas' },
-  { id: 3, nombre: 'Espacio #3', disponible: true, tamano: '2×2mts', electrico: false, anotaciones: 'Acá irá información adicional sobre el espacio de ser necesario.' },
-  { id: 4, nombre: 'Espacio #4', disponible: true, tamano: '2×2mts', electrico: true, anotaciones: 'Acá irá información adicional sobre el espacio de ser necesario.' },
-];
+import { getEspaciosPorFeria } from '../services/espacioService';
+import { Espacio } from '../types/espacioTypes';
+import { auth } from '../services/firebaseConfig';
 
 const DetalleFeria: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const feriaId = searchParams.get('feriaId'); // Obtenemos el parámetro de la URL
+  const [espacios, setEspacios] = useState<Espacio[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  useEffect(() => {
+    console.log('FeriaID obtenido:', feriaId); // Para depuración
+    
+    if (!feriaId) {
+      setError('No se especificó ID de feria en la URL');
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      setCurrentUser(user);
+    });
+
+    const cargarEspacios = async () => {
+      try {
+        const espaciosData = await getEspaciosPorFeria(feriaId);
+        
+        if (espaciosData.length === 0) {
+          setError('No se encontraron espacios para esta feria');
+        } else {
+          setEspacios(espaciosData);
+        }
+      } catch (err) {
+        console.error('Error al cargar espacios:', err);
+        setError(err instanceof Error ? err.message : 'Error al cargar espacios');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarEspacios();
+
+    return () => unsubscribe();
+  }, [feriaId]); // Dependencia del efecto
+
+  const handleSeleccionar = async (espacioId: string) => {
+    if (!currentUser) {
+      alert('Debes iniciar sesión para reservar un espacio');
+      return;
+    }
+
+    try {
+      // Aquí implementarías la reserva
+      alert(`Espacio ${espacioId} seleccionado`);
+      // Actualizar estado en Firebase y localmente
+      setEspacios(espacios.map(esp => 
+        esp.id === espacioId ? { ...esp, disponible: false } : esp
+      ));
+    } catch (error) {
+      console.error("Error al reservar:", error);
+      alert("Error al reservar el espacio");
+    }
+  };
+
+  if (loading) {
+    return (
+      <main className={styles.main}>
+        <h1 className={styles.title}>Cargando espacios...</h1>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className={styles.main}>
+        <h1 className={styles.title}>Error</h1>
+        <p className={styles.subtitle}>{error}</p>
+      </main>
+    );
+  }
+
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Nombre de la feria</h1>
@@ -29,10 +95,16 @@ const DetalleFeria: React.FC = () => {
           {espacios.map((espacio) => (
             <div key={espacio.id} className={`${styles.espacio} ${espacio.disponible ? styles.disponible : styles.noDisponible}`}>
               <h3>{espacio.nombre}</h3>
-              <p><strong>Espacio disponible:</strong> {espacio.tamano}</p>
-              <p><strong>¿Conexión eléctrica?:</strong> {espacio.electrico ? 'SI' : 'NO'}</p>
+              <p><strong>Dimensiones:</strong> {espacio.dimensiones}</p>
+              <p><strong>Conexión eléctrica:</strong> {espacio.electricidad ? 'Sí' : 'No'}</p>
+              {espacio.precio && <p><strong>Precio:</strong> ₡{espacio.precio.toLocaleString()}</p>}
               <p><strong>Anotaciones:</strong> {espacio.anotaciones}</p>
-              <button className={espacio.disponible ? styles.btnSeleccionar : styles.btnNoDisponible}>
+              
+              <button 
+                onClick={() => espacio.id && handleSeleccionar(espacio.id)}
+                className={espacio.disponible ? styles.btnSeleccionar : styles.btnNoDisponible}
+                disabled={!espacio.disponible}
+              >
                 {espacio.disponible ? 'Seleccionar espacio' : 'No disponible'}
               </button>
             </div>
@@ -40,14 +112,18 @@ const DetalleFeria: React.FC = () => {
         </div>
 
         <div className={styles.lateral}>
-          <button className={styles.adjuntarBtn}>Adjuntar documentos</button>
-          <div className={styles.documentos}>
-            <p><strong>Documentos subidos</strong></p>
-            <ul>
-              <li>solicitud.pdf</li>
-              <li>Permisos_sanitarios.pdf</li>
-            </ul>
-          </div>
+          {currentUser && (
+            <>
+              <button className={styles.adjuntarBtn}>Adjuntar documentos</button>
+              <div className={styles.documentos}>
+                <p><strong>Documentos subidos</strong></p>
+                <ul>
+                  <li>solicitud.pdf</li>
+                  <li>Permisos_sanitarios.pdf</li>
+                </ul>
+              </div>
+            </>
+          )}
           <img src="/feria.jpg" alt="Imagen feria" className={styles.imagenFeria} />
         </div>
       </div>

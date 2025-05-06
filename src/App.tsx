@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import ApplyDetails from "./pages/apply-details";
 import ProfilePage from "./pages/UserInfo";
+import LoginForm from "./pages/LoginPage";
 
 //Info para ver el perfil de usuario
 const userData = {
@@ -33,6 +34,7 @@ const App: React.FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/apply-details" element={<ApplyDetails />} />
           <Route path="/user-info" element={<ProfilePage user={userData} emprendimiento={emprendimientoData} />} />
+          <Route path="/login" element={<LoginForm />} />
         </Routes>
       </main>
       <PiePagina />
