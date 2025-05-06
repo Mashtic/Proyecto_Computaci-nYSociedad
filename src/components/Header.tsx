@@ -12,9 +12,7 @@ const Encabezado: React.FC = () => {
           <a href="/">Inicio</a>
           <a href="/solicitudes">Solicitudes</a>
           <a href="/historial">Historial</a>
-          <Link to = "/InicioSesion">
-            <button className = {"boton-sesion"}>Iniciar Sesión</button>
-          </Link>
+            <a href="/login" className={"boton-sesion"}>Iniciar Sesión</a>
         </nav>
 
       </div>
