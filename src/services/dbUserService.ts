@@ -65,10 +65,9 @@ export async function getUser(userId: string): Promise<{ user: UserProfile; empr
     if (userDoc.exists()) {
       const userData = userDoc.data();
 
-      // Asegurémonos de que los datos coinciden con las interfaces
       const user: UserProfile = {
         nombre: userData.nombre,
-        apellido: userData.apellidos,
+        apellidos: userData.apellido,
         departamento: userData.departamento,
         email: userData.email,
         cedula: userData.cedula,
